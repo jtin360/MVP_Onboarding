@@ -1,16 +1,22 @@
 package com.kasper.mvp_onboarding.UI;
 
 import android.app.ProgressDialog;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kasper.mvp_onboarding.R;
 import com.kasper.mvp_onboarding.Register.IRegister_View;
 import com.kasper.mvp_onboarding.Register.Register_Presenter;
+
+import me.grantland.widget.AutofitTextView;
 
 /**
  * Created by Kasper on 5/15/17.
@@ -19,6 +25,9 @@ import com.kasper.mvp_onboarding.Register.Register_Presenter;
 public class Register_Screen extends AppCompatActivity implements IRegister_View {
 
     private EditText username, password, firstName, lastName, email, phoneNumber;
+    private AutofitTextView toastText;
+    private View view;
+    private ImageView toastImage;
     private Button register_button;
     private Register_Presenter presenter;
     private ProgressDialog progressDialog;
@@ -41,6 +50,9 @@ public class Register_Screen extends AppCompatActivity implements IRegister_View
         email = (EditText) findViewById(R.id.email);
         phoneNumber = (EditText) findViewById(R.id.phone_number);
         register_button = (Button) findViewById(R.id.register_button);
+        view = getLayoutInflater().inflate(R.layout.error_toast,null);
+        toastImage = (ImageView) view.findViewById(R.id.image);
+        toastText = (AutofitTextView) view.findViewById(R.id.text);
 
         register_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,6 +72,16 @@ public class Register_Screen extends AppCompatActivity implements IRegister_View
         });
     }
 
+    private void createToast(String message) {
+
+        toastText.setText(message);
+        Toast mToast = new Toast(getApplicationContext());
+        mToast.setView(view);
+        mToast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        mToast.setDuration(Toast.LENGTH_LONG);
+        mToast.show();
+    }
+
     @Override
     public void navigateToHome() {
         progressDialog.dismiss();
@@ -69,7 +91,8 @@ public class Register_Screen extends AppCompatActivity implements IRegister_View
     @Override
     public void onEmptyUsername() {
         progressDialog.dismiss();
-        Toast.makeText(this, "Oop! You forgot to enter your username!", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Oop! You forgot to enter your username!", Toast.LENGTH_SHORT).show();
+        createToast("Oop! You forgot to enter your username!");
     }
 
     @Override
